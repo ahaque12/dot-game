@@ -1,26 +1,28 @@
 import argparse
 import game
+from typing import Tuple
 
 
-def clean_state(state_str):
+def clean_state(state_str: str) -> Tuple[int]:
     """Clean string representing state.
     """
     state_list = state_str.split()
     for item in state_list:
         if not item.isdigit():
             return None
-    state_list = [int(x) for x in state_list]
+    state_list = sorted([int(x) for x in state_list], reverse=True)
 
     return tuple(state_list)
-    
-def play_computer(state):
+
+
+def play_computer(state: game.State):
     """Play game with computer.
     """
     while True:
         print(state)
         if state.player_turn == 1:
             print("Your turn")
-            row = int(input("Choose row to pop: "))
+            row = int(input("Choose row to pop (0 indexed): "))
             pop = int(input("Choose pop to pop: "))
         else:
             val, row, pop = game.minimum(state)
@@ -30,6 +32,7 @@ def play_computer(state):
             print("Congrats to player", state.player_turn)
             break
 
+
 def main():
     parser = argparse.ArgumentParser("Play the dot game.")
     parser.add_argument('--initial_state', type=int, nargs='+',
@@ -37,7 +40,7 @@ def main():
                         help='Initial state of the game.')
     args = parser.parse_args()
 
-    initial_state = game.State(tuple(args.initial_state), 1)
+    initial_state = game.State(tuple(sorted(args.initial_state, reverse=True)), 1)
 
     print("Starting state...")
     print(initial_state)
@@ -64,7 +67,7 @@ def main():
 
         while True:
             state = input("What is the current state of the game (insert space delimited sequence e.g. '2 2 1')? ")
-            state = clean_state(state) 
+            state = clean_state(state)
             if state is not None:
                 break
             else:
@@ -74,6 +77,7 @@ def main():
             print(game.maximum(state))
         else:
             print(game.minimum(state))
+
 
 if __name__ == "__main__":
     main()
