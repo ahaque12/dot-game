@@ -44,8 +44,9 @@ def sort(func):
 
 # @sort
 @functools.lru_cache(maxsize=2**20)
-def maximum(state: State):
-
+def maximum(state: State) -> Tuple[int, int, int]:
+    """Find the move that minimizes player 1's likelihood of winning.
+    """
     maxv = -2
     result = is_end(state)
 
@@ -70,7 +71,9 @@ def maximum(state: State):
 
 # @sort
 @functools.lru_cache(maxsize=2**20)
-def minimum(state: State):
+def minimum(state: State) -> Tuple[int, int, int]:
+    """Find the move that minimizes player 1's likelihood of winning.
+    """
     minv = 2
     result = is_end(state)
 
@@ -93,6 +96,11 @@ def minimum(state: State):
 
 
 def play(state: State, row: int, pop: int) -> State:
+    """Play a move in the given state.
+
+    If a move is invalid an error is raised. The new state
+    reflects the state in descending order.
+    """
     if not valid_pos(state, row, pop):
         raise ValueError("Invalid input!")
 
