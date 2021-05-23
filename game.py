@@ -1,6 +1,7 @@
 import functools
 from collections import namedtuple
 
+
 State = namedtuple("State", "current_state player_turn")
 
 def valid_pos(state, row : int, to_pop : int):
@@ -19,7 +20,7 @@ def is_end(state):
 
     return 0
 
-def change_turn(turn):
+def change_turn(turn: int):
     if turn == 1:
         return 2
     else:
