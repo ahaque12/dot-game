@@ -87,7 +87,8 @@ def main():
                 print("Invalid state, try again")
         state = game.State(state, player)
         print(state)
-        print(game.optimal_play(state))
+        val, row, pop = game.optimal_play(state)
+        print("Optimal play is row {} and number of dots {}.".format(row, pop))
 
 
 if __name__ == "__main__":

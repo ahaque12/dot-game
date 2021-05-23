@@ -46,13 +46,13 @@ What is the current state of the game (insert space delimited sequence e.g. '2 2
 Player turn: 1
 Row 0: oo
 Row 1: ooo
-(1, 1, 1)
+Optimal play is row 1 and number of dots 1.
 Do you want a hint [Y/N, Default: Y]?
 Are you player 1 or 2 [Default: 1? 2
 What is the current state of the game (insert space delimited sequence e.g. '2 2 1')? 2 2
 Player turn: 2
 Row 0: oo
 Row 1: oo
-(1, 0, 1)
+Optimal play is row 0 and number of dots 1.
 Do you want a hint [Y/N, Default: Y]? N
 ```
