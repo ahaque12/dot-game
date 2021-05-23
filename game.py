@@ -8,7 +8,8 @@ class State(NamedTuple):
 
     def __str__(self):
         return "Player turn: {}\n".format(self.player_turn) + \
-               "\n".join(["Row {}: ".format(i) + 'o'*x for (i, x) in enumerate(self.current_state)])
+               "\n".join(["Row {}: ".format(i) +
+                          'o'*x for (i, x) in enumerate(self.current_state)])
 
 
 def valid_pos(state: State, row: int, to_pop: int) -> bool:

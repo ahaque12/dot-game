@@ -33,26 +33,39 @@ def play_computer(state: game.State):
             break
 
 
+def play_human(state: game.State):
+    """Play game with another human.
+    """
+    while True:
+        print(state)
+        val, row, pop = game.optimal_play(state)
+        print("Optimal play is row {} and number of dots {}.".format(row, pop))
+        row = int(input("Choose row to pop (0 indexed): "))
+        pop = int(input("Choose pop to pop: "))
+        state = game.play(state, row, pop)
+        if game.is_end(state) != 0:
+            print("Congrats to player", state.player_turn)
+            break
+
+
 def main():
     parser = argparse.ArgumentParser("Play the dot game.")
-    parser.add_argument('--initial_state', type=int, nargs='+',
+    parser.add_argument("-i", "--initial_state", type=int, nargs='+',
                         default=[2, 4, 5, 5, 5, 5, 5, 1],
-                        help='Initial state of the game.')
+                        help="Initial state of the game.")
+    parser.add_argument("-p", "--play_human", action='store_true',
+                        help="Play game with hints throughout.")
+    parser.add_argument("-c", "--play_computer", action='store_true',
+                        help="Play game with computer.")
     args = parser.parse_args()
 
     initial_state = game.State(tuple(args.initial_state), 1)
 
-    print("Starting state...")
-    print(initial_state)
-
-    # Play multiple games with computer.
-    # All results are cached.
-    while True:
-        answer = input("Do you want to play a game [Y/N, Default: Y]? ")
-        if answer != "Y" and answer != "":
-            break
+    if args.play_human:
+        play_human(initial_state)
+    elif args.play_computer:
         play_computer(initial_state)
-    print("It was fun playing!")
+        print("It was fun playing!")
 
     # Interactively get hints.
     while True:
