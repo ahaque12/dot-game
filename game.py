@@ -6,6 +6,10 @@ class State(NamedTuple):
     current_state: Tuple[int, ...]
     player_turn: int
 
+    def __str__(self):
+        return "Player turn: {}\n".format(self.player_turn) + \
+               "\n".join(["Row {}: ".format(i) + 'o'*x for (i, x) in enumerate(self.current_state)])
+
 
 def valid_pos(state: State, row: int, to_pop: int) -> bool:
     """Determine if position is valid.

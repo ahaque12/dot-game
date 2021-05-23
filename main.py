@@ -73,6 +73,7 @@ def main():
             else:
                 print("Invalid state, try again")
         state = game.State(state, player)
+        print(state)
         print(game.optimal_play(state))
 
 
