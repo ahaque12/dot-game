@@ -33,6 +33,27 @@ def change_turn(turn: int):
     return turn
 
 
+def optimal_play(state: State) -> Tuple[int, int, int]:
+    """Determine optimal move for player.
+    """
+    if state.player_turn == 1:
+        val, row, pop = maximum(state)
+    else:
+        val, row, pop = minimum(state)
+
+    # Rows can be different after sorting in
+    # descending order. Adjust row to find original row
+    # with the same number of dots.
+    adjusted_row = row
+    sorted_state = sorted(state.current_state, reverse=True)
+    for i, dots in enumerate(state.current_state):
+        if state.current_state[i] == sorted_state[row]:
+            adjusted_row = i
+            break
+
+    return (val, adjusted_row, pop)
+
+
 def sort(func):
     def wrapper(state: State):
         return func(State(tuple(sorted(state.current_state, reverse=True)),
@@ -42,7 +63,7 @@ def sort(func):
     return wrapper
 
 
-# @sort
+@sort
 @functools.lru_cache(maxsize=2**20)
 def maximum(state: State) -> Tuple[int, int, int]:
     """Find the move that minimizes player 1's likelihood of winning.
@@ -69,7 +90,7 @@ def maximum(state: State) -> Tuple[int, int, int]:
     return (maxv, prow, ppop)
 
 
-# @sort
+@sort
 @functools.lru_cache(maxsize=2**20)
 def minimum(state: State) -> Tuple[int, int, int]:
     """Find the move that minimizes player 1's likelihood of winning.
@@ -98,14 +119,12 @@ def minimum(state: State) -> Tuple[int, int, int]:
 def play(state: State, row: int, pop: int) -> State:
     """Play a move in the given state.
 
-    If a move is invalid an error is raised. The new state
-    reflects the state in descending order.
+    If a move is invalid an error is raised.
     """
     if not valid_pos(state, row, pop):
         raise ValueError("Invalid input!")
 
     current_state = list(state.current_state)
     current_state[row] -= pop
-    current_state.sort(reverse=True)
     state = State(tuple(current_state), change_turn(state.player_turn))
     return state

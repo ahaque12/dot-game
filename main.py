@@ -10,7 +10,7 @@ def clean_state(state_str: str) -> Tuple[int]:
     for item in state_list:
         if not item.isdigit():
             return None
-    state_list = sorted([int(x) for x in state_list], reverse=True)
+    state_list = [int(x) for x in state_list]
 
     return tuple(state_list)
 
@@ -25,7 +25,7 @@ def play_computer(state: game.State):
             row = int(input("Choose row to pop (0 indexed): "))
             pop = int(input("Choose pop to pop: "))
         else:
-            val, row, pop = game.minimum(state)
+            val, row, pop = game.optimal_play(state)
         print("Play:", row, pop)
         state = game.play(state, row, pop)
         if game.is_end(state) != 0:
@@ -40,7 +40,7 @@ def main():
                         help='Initial state of the game.')
     args = parser.parse_args()
 
-    initial_state = game.State(tuple(sorted(args.initial_state, reverse=True)), 1)
+    initial_state = game.State(tuple(args.initial_state), 1)
 
     print("Starting state...")
     print(initial_state)
@@ -73,10 +73,7 @@ def main():
             else:
                 print("Invalid state, try again")
         state = game.State(state, player)
-        if player == 1:
-            print(game.maximum(state))
-        else:
-            print(game.minimum(state))
+        print(game.optimal_play(state))
 
 
 if __name__ == "__main__":
