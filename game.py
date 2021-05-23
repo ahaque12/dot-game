@@ -8,6 +8,8 @@ class State(NamedTuple):
 
 
 def valid_pos(state: State, row: int, to_pop: int) -> bool:
+    """Determine if position is valid.
+    """
     if row < 0 or row >= len(state.current_state):
         return False
 
@@ -17,14 +19,18 @@ def valid_pos(state: State, row: int, to_pop: int) -> bool:
     return True
 
 
-def is_end(state: State):
+def is_end(state: State) -> int:
+    """Determine if game has ended and who wins.
+    """
     if sum(state.current_state) == 0:
         return state.player_turn
 
     return 0
 
 
-def change_turn(turn: int):
+def change_turn(turn: int) -> int:
+    """Change a player's turn from 1 to 2 and vice versa.
+    """
     if turn == 1:
         return 2
     else:
@@ -55,6 +61,8 @@ def optimal_play(state: State) -> Tuple[int, int, int]:
 
 
 def sort(func):
+    """Sorting decorator to sort state prior to passing to downstream function.
+    """
     def wrapper(state: State):
         return func(State(tuple(sorted(state.current_state, reverse=True)),
                           state.player_turn
