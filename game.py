@@ -47,10 +47,7 @@ def change_turn(turn: int) -> int:
 def optimal_play(state: State) -> Tuple[int, int, int]:
     """Determine optimal move for player.
     """
-    if state.player_turn == 1:
-        val, row, pop = maximum(state)
-    else:
-        val, row, pop = minimum(state)
+    val, row, pop = maximum(state, min=state.player_turn != 1)
 
     # Rows can be different after sorting in
     # descending order. Adjust row to find original row
@@ -68,20 +65,24 @@ def optimal_play(state: State) -> Tuple[int, int, int]:
 def sort(func):
     """Sorting decorator to sort state prior to passing to downstream function.
     """
-    def wrapper(state: State):
+    def wrapper(state: State, **kwargs):
         return func(State(tuple(sorted(state.current_state, reverse=True)),
                           state.player_turn
-                          )
+                          ),
+                          **kwargs 
                     )
     return wrapper
 
 
 @sort
 @functools.lru_cache(maxsize=2**20)
-def maximum(state: State) -> Tuple[int, int, int]:
+def maximum(state: State, min=False) -> Tuple[int, int, int]:
     """Find the move that minimizes player 1's likelihood of winning.
+
+    If min is true then this will minimize player 1's likelihood of winning.
     """
-    maxv = -2
+    # "Worst" value to benchmark against.
+    maxv = 2 if min else -2
     result = is_end(state)
 
     if result == 1:
@@ -93,40 +94,19 @@ def maximum(state: State) -> Tuple[int, int, int]:
         for j in range(1, state.current_state[i] + 1):
             new_state = play(state, i, j)
 
-            (m, min_row, min_pop) = minimum(new_state)
+            (m, min_row, min_pop) = maximum(new_state, min=not min)
 
-            if m > maxv:
+            if (not min) and (m > maxv):
+                maxv = m
+                prow = i
+                ppop = j
+
+            if min and (m < maxv):
                 maxv = m
                 prow = i
                 ppop = j
 
     return (maxv, prow, ppop)
-
-
-@sort
-@functools.lru_cache(maxsize=2**20)
-def minimum(state: State) -> Tuple[int, int, int]:
-    """Find the move that minimizes player 1's likelihood of winning.
-    """
-    minv = 2
-    result = is_end(state)
-
-    if result == 1:
-        return (1, 0, 0)
-    elif result == 2:
-        return (-1, 0, 0)
-
-    for i in range(len(state.current_state)):
-        for j in range(1, state.current_state[i] + 1):
-
-            new_state = play(state, i, j)
-            (m, max_row, max_pop) = maximum(new_state)
-            if m < minv:
-                minv = m
-                prow = i
-                ppop = j
-
-    return (minv, prow, ppop)
 
 
 def play(state: State, row: int, pop: int) -> State:
