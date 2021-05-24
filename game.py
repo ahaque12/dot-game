@@ -38,16 +38,16 @@ def change_turn(turn: int) -> int:
     """
     if turn == 1:
         return 2
-    else:
+    elif turn == 2:
         return 1
-
-    return turn
+    else:
+        raise ValueError("Valid values for players are 1 or 2!")
 
 
 def optimal_play(state: State) -> Tuple[int, int, int]:
     """Determine optimal move for player.
     """
-    val, row, pop = maximum(state, min=state.player_turn != 1)
+    val, row, pop = maximum(state)
 
     # Rows can be different after sorting in
     # descending order. Adjust row to find original row
@@ -69,39 +69,37 @@ def sort(func):
         return func(State(tuple(sorted(state.current_state, reverse=True)),
                           state.player_turn
                           ),
-                          **kwargs 
+                    **kwargs
                     )
     return wrapper
 
 
 @sort
 @functools.lru_cache(maxsize=2**20)
-def maximum(state: State, min=False) -> Tuple[int, int, int]:
-    """Find the move that minimizes player 1's likelihood of winning.
-
-    If min is true then this will minimize player 1's likelihood of winning.
+def maximum(state: State) -> Tuple[int, int, int]:
+    """Find the move that maximizes current player's likelihood of winning.
     """
-    # "Worst" value to benchmark against.
-    maxv = 2 if min else -2
+    # "Worst" value for storing maximum value.
+    maxv = -2
     result = is_end(state)
 
-    if result == 1:
+    # Maximize from current player's perspective.
+    if result == state.player_turn:
         return (1, 0, 0)
-    elif result == 2:
+    elif result > 0:
         return (-1, 0, 0)
 
     for i in range(len(state.current_state)):
         for j in range(1, state.current_state[i] + 1):
             new_state = play(state, i, j)
 
-            (m, min_row, min_pop) = maximum(new_state, min=not min)
+            (m, min_row, min_pop) = maximum(new_state)
 
-            if (not min) and (m > maxv):
-                maxv = m
-                prow = i
-                ppop = j
+            # The maximum value for your opponent is negative value.
+            # to the player.
+            m = -m
 
-            if min and (m < maxv):
+            if m > maxv:
                 maxv = m
                 prow = i
                 ppop = j

@@ -3,16 +3,16 @@ import game
 from typing import Tuple
 
 
-def clean_state(state_str: str) -> Tuple[int]:
+def clean_state(state_str: str) -> Tuple[int, ...]:
     """Clean string representing state.
     """
     state_list = state_str.split()
     for item in state_list:
         if not item.isdigit():
             return None
-    state_list = [int(x) for x in state_list]
+    clean_list = [int(x) for x in state_list]
 
-    return tuple(state_list)
+    return tuple(clean_list)
 
 
 def play_computer(state: game.State):
