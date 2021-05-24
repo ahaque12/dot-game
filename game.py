@@ -78,6 +78,25 @@ def sort(func):
 @functools.lru_cache(maxsize=2**20)
 def maximum(state: State) -> Tuple[int, int, int]:
     """Find the move that maximizes current player's likelihood of winning.
+
+    Args:
+        state: State, required
+            State of the game to maximize.
+
+    Returns:
+        val: int
+            Maximum value guaranteed with optimal play. Range is between
+            -1 (losing) and 1 (winning).
+
+        row: int
+            Row to play move.
+
+        dots: int
+            Number of dots to push in.
+
+    Examples:
+    >>> maximum(State((2, 1), 1), 1)
+    (1, 0, 2)
     """
     # "Worst" value for storing maximum value.
     maxv = -2
