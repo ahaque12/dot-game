@@ -5,6 +5,11 @@ from typing import Tuple
 
 def clean_state(state_str: str) -> Tuple[int, ...]:
     """Clean string representing state.
+
+    Examples:
+    >>> clean_state("2 3")
+    (2, 3)
+    >>> clean_state("abc -2 32")
     """
     state_list = state_str.split()
     for item in state_list:

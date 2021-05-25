@@ -46,6 +46,10 @@ def change_turn(turn: int) -> int:
 
 def optimal_play(state: State) -> Tuple[int, int, int]:
     """Determine optimal move for player.
+
+    Examples:
+    >>> optimal_play(State((1, 2, 1), 1))
+    (1, 1, 1)
     """
     val, row, pop = maximum(state)
 
@@ -95,7 +99,7 @@ def maximum(state: State) -> Tuple[int, int, int]:
             Number of dots to push in.
 
     Examples:
-    >>> maximum(State((2, 1), 1), 1)
+    >>> maximum(State((2, 1), 1))
     (1, 0, 2)
     """
     # "Worst" value for storing maximum value.
