@@ -1,4 +1,5 @@
 # Dot Game
+[![CodeCov](https://github.com/ahaque12/dot-game/actions/workflows/test-cov.yml/badge.svg?branch=main)](https://github.com/ahaque12/dot-game/actions/workflows/test-cov.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ahaque12/dot-game/badge.svg?branch=main)](https://coveralls.io/github/ahaque12/dot-game?branch=main)
 
 The dot game is a game where two players have a grid of dots that can be pressed in. Each
