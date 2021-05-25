@@ -1,4 +1,6 @@
 # Dot Game
+[![Coverage Status](https://coveralls.io/repos/github/ahaque12/dot-game/badge.svg?branch=main)](https://coveralls.io/github/ahaque12/dot-game?branch=main)
+
 The dot game is a game where two players have a grid of dots that can be pressed in. Each
 row in the grid can have an arbitrary number of dots. On each player's turn, they can 
 press in as many dots as they'd like, as long as the dots are within the same row. Players must press in at least
